@@ -1,0 +1,1046 @@
+
+MongoDB - Day 2: 05/08/2023
+---------------------
+
+
+BlrBatch1> db.createCollection("Emp_det")
+{ ok: 1 }
+BlrBatch1> db.Emp_det.insertMany([ {"Name":"Sivaraman", "Gender":"Male","Department":"HR","Salary":45899.90},{"Name":"Suresh","Gender":"Male","Department":"Sales","Salary":30000.00},{"Name":"Samuel","Gender":"Male","Department":"Sales","Salary":22300.00},{"Name":"Priya","Gender":"Female","Department":"Admin","Salary":18500.00}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("64cdc910552a059031759f10"),
+    '1': ObjectId("64cdc910552a059031759f11"),
+    '2': ObjectId("64cdc910552a059031759f12"),
+    '3': ObjectId("64cdc910552a059031759f13")
+  }
+}
+BlrBatch1> db.Emp_det.insertMany([ {"Name":"Radhika", "Gender":"Female","Department":"HR","Salary":48899.90},{"Name":"Kavin","Gender":"Male","Department":"Sales","Salary":32000.00},{"Name":"Lal","Gender":"Male","Department":"Sales","Salary":25600.00},{"Name":"Ramya","Gender":"Female","Department":"Admin","Salary":17500.00}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("64cdc9b2552a059031759f14"),
+    '1': ObjectId("64cdc9b2552a059031759f15"),
+    '2': ObjectId("64cdc9b2552a059031759f16"),
+    '3': ObjectId("64cdc9b2552a059031759f17")
+  }
+}
+BlrBatch1> db.Emp_det.insertMany([ {"Name":"Sailaja", "Gender":"Female","Department":"HR","Salary":40899.90},{"Name":"Kumar","Gender":"Male","Department":"Sales","Salary":22000.00},{"Name":"Hari","Gender":"Male","Department":"Sales","Salary":21600.00},{"Name":"Kavya","Gender":"Female","Department":"Admin","Salary":14500.00}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("64cdc9f3552a059031759f18"),
+    '1': ObjectId("64cdc9f3552a059031759f19"),
+    '2': ObjectId("64cdc9f3552a059031759f1a"),
+    '3': ObjectId("64cdc9f3552a059031759f1b")
+  }
+}
+BlrBatch1> db.Emp_det.find().pretty()
+[
+  {
+    _id: ObjectId("64cdc910552a059031759f10"),
+    Name: 'Sivaraman',
+    Gender: 'Male',
+    Department: 'HR',
+    Salary: 45899.9
+  },
+  {
+    _id: ObjectId("64cdc910552a059031759f11"),
+    Name: 'Suresh',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 30000
+  },
+  {
+    _id: ObjectId("64cdc910552a059031759f12"),
+    Name: 'Samuel',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 22300
+  },
+  {
+    _id: ObjectId("64cdc910552a059031759f13"),
+    Name: 'Priya',
+    Gender: 'Female',
+    Department: 'Admin',
+    Salary: 18500
+  },
+  {
+    _id: ObjectId("64cdc9b2552a059031759f14"),
+    Name: 'Radhika',
+    Gender: 'Female',
+    Department: 'HR',
+    Salary: 48899.9
+  },
+  {
+    _id: ObjectId("64cdc9b2552a059031759f15"),
+    Name: 'Kavin',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 32000
+  },
+  {
+    _id: ObjectId("64cdc9b2552a059031759f16"),
+    Name: 'Lal',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 25600
+  },
+  {
+    _id: ObjectId("64cdc9b2552a059031759f17"),
+    Name: 'Ramya',
+    Gender: 'Female',
+    Department: 'Admin',
+    Salary: 17500
+  },
+  {
+    _id: ObjectId("64cdc9f3552a059031759f18"),
+    Name: 'Sailaja',
+    Gender: 'Female',
+    Department: 'HR',
+    Salary: 40899.9
+  },
+  {
+    _id: ObjectId("64cdc9f3552a059031759f19"),
+    Name: 'Kumar',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 22000
+  },
+  {
+    _id: ObjectId("64cdc9f3552a059031759f1a"),
+    Name: 'Hari',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 21600
+  },
+  {
+    _id: ObjectId("64cdc9f3552a059031759f1b"),
+    Name: 'Kavya',
+    Gender: 'Female',
+    Department: 'Admin',
+    Salary: 14500
+  }
+]
+
+Aggregate
+----------
+
+BlrBatch1> db.Emp_det.aggregate([{$group:{_id:"$Department"}}])
+[ { _id: 'HR' }, { _id: 'Admin' }, { _id: 'Sales' } ]
+
+
+
+BlrBatch1> db.Emp_det.aggregate([{$group:{_id:"$Department","Total_Employee":{$sum:1}}}])
+[
+  { _id: 'HR', Total_Employee: 3 },
+  { _id: 'Admin', Total_Employee: 3 },
+  { _id: 'Sales', Total_Employee: 6 }
+]
+
+BlrBatch1> db.Emp_det.aggregate([{$match:{"Gender":"Male"}},
+{$group:{_id:"$Department","Total_Employee":{$sum:1}}}])
+
+[
+  { _id: 'Sales', Total_Employee: 6 },
+  { _id: 'HR', Total_Employee: 1 }
+]
+BlrBatch1> db.Emp_det.aggregate([{$match:{"Gender":"Female"}},
+{$group:{_id:"$Department","Total_Employee":{$sum:1}}}])
+
+[
+  { _id: 'Admin', Total_Employee: 3 },
+  { _id: 'HR', Total_Employee: 2 }
+]
+
+BlrBatch1> db.Emp_det.aggregate([{$match:{"Gender":"Female"}},
+{$group:{_id:"$Department","Total_Salary":{$sum:"$Salary"}}}])
+
+[
+  { _id: 'Admin', Total_Salary: 50500 },
+  { _id: 'HR', Total_Salary: 89799.8 }
+]
+
+BlrBatch1> db.Emp_det.aggregate([{$match:{"Gender":"Male"}},
+{$group:{_id:"$Department","Total_Salary":{$sum:"$Salary"}}}])
+[
+  { _id: 'HR', Total_Salary: 45899.9 },
+  { _id: 'Sales', Total_Salary: 153500 }
+]
+
+BlrBatch1> db.Emp_det.aggregate([{$match:{"Gender":"Male"}},
+{$group:{_id:"$Department","Total_Salary":{$avg:"$Salary"}}}])
+[
+  { _id: 'Sales', Total_Salary: 25583.333333333332 },
+  { _id: 'HR', Total_Salary: 45899.9 }
+]
+BlrBatch1> db.Emp_det.aggregate([{$match:{"Gender":"Female"}},
+{$group:{_id:"$Department","Average_Salary_Female":{$avg:"$Salary"}}}])
+[
+  { _id: 'Admin', Average_Salary_Female: 16833.333333333332 },
+  { _id: 'HR', Average_Salary_Female: 44899.9 }
+]
+BlrBatch1> db.Emp_det.aggregate([{$match:{"Gender":"Male"}},{$group:{_id:"$Department","Average Salary Male":{$avg:"$Salary"}}}])
+[
+  { _id: 'HR', 'Average Salary Male': 45899.9 },
+  { _id: 'Sales', 'Average Salary Male': 25583.333333333332 }
+]
+
+BlrBatch1> db.Emp_det.aggregate([{$group:{_id:"$Department",
+"MAXIMUM_SALARY":{$max:"$Salary"}}}])
+[
+  { _id: 'HR', MAXIMUM_SALARY: 48899.9 },
+  { _id: 'Sales', MAXIMUM_SALARY: 32000 },
+  { _id: 'Admin', MAXIMUM_SALARY: 18500 }
+]
+BlrBatch1> db.Emp_det.aggregate([{$group:{_id:"$Department",
+"MINIMUM_SALARY":{$min:"$Salary"}}}])
+
+[
+  { _id: 'HR', MINIMUM_SALARY: 40899.9 },
+  { _id: 'Admin', MINIMUM_SALARY: 14500 },
+  { _id: 'Sales', MINIMUM_SALARY: 21600 }
+]
+
+UPDATE:
+-------
+BlrBatch1> db.Emp_det.updateOne({"Name":"Sailaja"},{$set:{"Salary":42899.80}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+BlrBatch1> db.Emp_det.updateMany({},{$set:{"DOJ":new Date("2023-08-05T10:09:45Z")}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 12,
+  modifiedCount: 12,
+  upsertedCount: 0
+}
+BlrBatch1> db.Emp_det.find({},{Name:1,Department:1,DOJ:1,_id:0})
+[
+  {
+    Name: 'Sivaraman',
+    Department: 'HR',
+    DOJ: ISODate("2023-08-05T10:09:45.000Z")
+  },
+  {
+    Name: 'Suresh',
+    Department: 'Sales',
+    DOJ: ISODate("2023-08-05T10:09:45.000Z")
+  },
+  {
+    Name: 'Samuel',
+    Department: 'Sales',
+    DOJ: ISODate("2023-08-05T10:09:45.000Z")
+  },
+  {
+    Name: 'Priya',
+    Department: 'Admin',
+    DOJ: ISODate("2023-08-05T10:09:45.000Z")
+  },
+  {
+    Name: 'Radhika',
+    Department: 'HR',
+    DOJ: ISODate("2023-08-05T10:09:45.000Z")
+  },
+  {
+    Name: 'Kavin',
+    Department: 'Sales',
+    DOJ: ISODate("2023-08-05T10:09:45.000Z")
+  },
+  {
+    Name: 'Lal',
+    Department: 'Sales',
+    DOJ: ISODate("2023-08-05T10:09:45.000Z")
+  },
+  {
+    Name: 'Ramya',
+    Department: 'Admin',
+    DOJ: ISODate("2023-08-05T10:09:45.000Z")
+  },
+  {
+    Name: 'Sailaja',
+    Department: 'HR',
+    DOJ: ISODate("2023-08-05T10:09:45.000Z")
+  },
+  {
+    Name: 'Kumar',
+    Department: 'Sales',
+    DOJ: ISODate("2023-08-05T10:09:45.000Z")
+  },
+  {
+    Name: 'Hari',
+    Department: 'Sales',
+    DOJ: ISODate("2023-08-05T10:09:45.000Z")
+  },
+  {
+    Name: 'Kavya',
+    Department: 'Admin',
+    DOJ: ISODate("2023-08-05T10:09:45.000Z")
+  }
+]
+
+
+BlrBatch1> db.Emp_det.updateOne({"Name":"Kavya"},{$currentDate:{"DOJ":true}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+BlrBatch1> db.Emp_det.find({},{Name:1,Department:1,Salary:1,_id:0})
+[
+  { Name: 'Sivaraman', Department: 'HR', Salary: 45899.9 },
+  { Name: 'Suresh', Department: 'Sales', Salary: 30000 },
+  { Name: 'Samuel', Department: 'Sales', Salary: 22300 },
+  { Name: 'Priya', Department: 'Admin', Salary: 18500 },
+  { Name: 'Radhika', Department: 'HR', Salary: 48899.9 },
+  { Name: 'Kavin', Department: 'Sales', Salary: 32000 },
+  { Name: 'Lal', Department: 'Sales', Salary: 25600 },
+  { Name: 'Ramya', Department: 'Admin', Salary: 17500 },
+  { Name: 'Sailaja', Department: 'HR', Salary: 42899.8 },
+  { Name: 'Kumar', Department: 'Sales', Salary: 22000 },
+  { Name: 'Hari', Department: 'Sales', Salary: 21600 },
+  { Name: 'Kavya', Department: 'Admin', Salary: 14500 }
+]
+
+BlrBatch1> db.Emp_det.updateMany({"Department":"Admin"},{$inc:{"Salary":1000}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}
+
+BlrBatch1> db.Emp_det.find({},{Name:1,Department:1,Salary:1,_id:0})
+[
+  { Name: 'Sivaraman', Department: 'HR', Salary: 45899.9 },
+  { Name: 'Suresh', Department: 'Sales', Salary: 30000 },
+  { Name: 'Samuel', Department: 'Sales', Salary: 22300 },
+  { Name: 'Priya', Department: 'Admin', Salary: 19500 },
+  { Name: 'Radhika', Department: 'HR', Salary: 48899.9 },
+  { Name: 'Kavin', Department: 'Sales', Salary: 32000 },
+  { Name: 'Lal', Department: 'Sales', Salary: 25600 },
+  { Name: 'Ramya', Department: 'Admin', Salary: 18500 },
+  { Name: 'Sailaja', Department: 'HR', Salary: 42899.8 },
+  { Name: 'Kumar', Department: 'Sales', Salary: 22000 },
+  { Name: 'Hari', Department: 'Sales', Salary: 21600 },
+  { Name: 'Kavya', Department: 'Admin', Salary: 15500 }
+]
+
+BlrBatch1> db.Emp_det.find({},{Name:1,Department:1,Salary:1,_id:0})
+[
+  { Name: 'Sivaraman', Department: 'HR', Salary: 49500 },
+  { Name: 'Suresh', Department: 'Sales', Salary: 30000 },
+  { Name: 'Samuel', Department: 'Sales', Salary: 22300 },
+  { Name: 'Priya', Department: 'Admin', Salary: 19500 },
+  { Name: 'Radhika', Department: 'HR', Salary: 48899.9 },
+  { Name: 'Kavin', Department: 'Sales', Salary: 32000 },
+  { Name: 'Lal', Department: 'Sales', Salary: 25600 },
+  { Name: 'Ramya', Department: 'Admin', Salary: 18500 },
+  { Name: 'Sailaja', Department: 'HR', Salary: 42899.8 },
+  { Name: 'Kumar', Department: 'Sales', Salary: 22000 },
+  { Name: 'Hari', Department: 'Sales', Salary: 21600 },
+  { Name: 'Kavya', Department: 'Admin', Salary: 15500 }
+]
+BlrBatch1> db.Emp_det.updateMany({"Name":"Lal"},{$min:{"Salary":14500.00}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+BlrBatch1> db.Emp_det.find({},{Name:1,Department:1,Salary:1,_id:0})
+[
+  { Name: 'Sivaraman', Department: 'HR', Salary: 49500 },
+  { Name: 'Suresh', Department: 'Sales', Salary: 30000 },
+  { Name: 'Samuel', Department: 'Sales', Salary: 22300 },
+  { Name: 'Priya', Department: 'Admin', Salary: 19500 },
+  { Name: 'Radhika', Department: 'HR', Salary: 48899.9 },
+  { Name: 'Kavin', Department: 'Sales', Salary: 32000 },
+  { Name: 'Lal', Department: 'Sales', Salary: 14500 },
+  { Name: 'Ramya', Department: 'Admin', Salary: 18500 },
+  { Name: 'Sailaja', Department: 'HR', Salary: 42899.8 },
+  { Name: 'Kumar', Department: 'Sales', Salary: 22000 },
+  { Name: 'Hari', Department: 'Sales', Salary: 21600 },
+  { Name: 'Kavya', Department: 'Admin', Salary: 15500 }
+]
+
+
+BlrBatch1> db.Emp_det.updateMany({"Department":"Sales"},{$mul:{"Salary":2}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 6,
+  modifiedCount: 6,
+  upsertedCount: 0
+}
+BlrBatch1> db.Emp_det.find({},{Name:1,Department:1,Salary:1,_id:0})
+[
+  { Name: 'Sivaraman', Department: 'HR', Salary: 49500 },
+  { Name: 'Suresh', Department: 'Sales', Salary: 60000 },
+  { Name: 'Samuel', Department: 'Sales', Salary: 44600 },
+  { Name: 'Priya', Department: 'Admin', Salary: 19500 },
+  { Name: 'Radhika', Department: 'HR', Salary: 48899.9 },
+  { Name: 'Kavin', Department: 'Sales', Salary: 64000 },
+  { Name: 'Lal', Department: 'Sales', Salary: 29000 },
+  { Name: 'Ramya', Department: 'Admin', Salary: 18500 },
+  { Name: 'Sailaja', Department: 'HR', Salary: 42899.8 },
+  { Name: 'Kumar', Department: 'Sales', Salary: 44000 },
+  { Name: 'Hari', Department: 'Sales', Salary: 43200 },
+  { Name: 'Kavya', Department: 'Admin', Salary: 15500 }
+]
+
+// To change the field the key name
+
+BlrBatch1> db.Emp_det.updateMany({},{$rename:{"Company":"Company_Name"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 12,
+  modifiedCount: 12,
+  upsertedCount: 0
+}
+BlrBatch1> db.Emp_det.find({},{Name:1,Department:1,Salary:1,Company_Name:1,_id:0})
+[
+  {
+    Name: 'Sivaraman',
+    Department: 'HR',
+    Salary: 49500,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Suresh',
+    Department: 'Sales',
+    Salary: 60000,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Samuel',
+    Department: 'Sales',
+    Salary: 44600,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Priya',
+    Department: 'Admin',
+    Salary: 19500,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Radhika',
+    Department: 'HR',
+    Salary: 48899.9,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Kavin',
+    Department: 'Sales',
+    Salary: 64000,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Lal',
+    Department: 'Sales',
+    Salary: 29000,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Ramya',
+    Department: 'Admin',
+    Salary: 18500,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Sailaja',
+    Department: 'HR',
+    Salary: 42899.8,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Kumar',
+    Department: 'Sales',
+    Salary: 44000,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Hari',
+    Department: 'Sales',
+    Salary: 43200,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Kavya',
+    Department: 'Admin',
+    Salary: 15500,
+    Company_Name: 'KGISL'
+  }
+]
+
+BlrBatch1> db.Emp_det.renameCollection("Emp_details");
+{ ok: 1 }
+
+BlrBatch1> db.Emp_details.updateOne({Name:"Kiruba"},
+{$set:{"Department":"Sales","Salary":26500,"Company_Name":"KGiSL"}},{upsert:true})
+
+{
+  acknowledged: true,
+  insertedId: ObjectId("64cdd98d0cdec061feae88b3"),
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 1
+}
+
+BlrBatch1> db.Emp_details.updateOne({Name:"Kiruba"},{$set:{Gender:"Male"}},{upsert:true})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+BlrBatch1> db.Emp_details.find({},{Name:1,Gender:1,Department:1,Salary:1,Company_Name:1,_id:0})
+[
+  {
+    Name: 'Sivaraman',
+    Gender: 'Male',
+    Department: 'HR',
+    Salary: 49500,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Suresh',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 60000,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Samuel',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 44600,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Priya',
+    Gender: 'Female',
+    Department: 'Admin',
+    Salary: 19500,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Radhika',
+    Gender: 'Female',
+    Department: 'HR',
+    Salary: 48899.9,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Kavin',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 64000,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Lal',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 29000,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Ramya',
+    Gender: 'Female',
+    Department: 'Admin',
+    Salary: 18500,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Sailaja',
+    Gender: 'Female',
+    Department: 'HR',
+    Salary: 42899.8,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Kumar',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 44000,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Hari',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 43200,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Kavya',
+    Gender: 'Female',
+    Department: 'Admin',
+    Salary: 15500,
+    Company_Name: 'KGISL'
+  },
+  {
+    Name: 'Ramsaran',
+    Company_Name: 'KGiSL',
+    Department: 'Sales',
+    Gender: 'Male',
+    Salary: 26500
+  },
+  {
+    Name: 'Kiruba',
+    Company_Name: 'KGiSL',
+    Department: 'Sales',
+    Salary: 26500,
+    Gender: 'Male'
+  }
+]
+
+findAndModify
+-------------
+BlrBatch1> db.Emp_details.findAndModify({query:{Name:"Pradeep"},
+update:{$set:{Gender:"Male",Department:"Admin",Salary:18000.00,Company_Name:"KGiSL"}},
+upsert:true})
+
+null
+
+Working with Array
+------------------------
+
+
+
+BlrBatch1> db.createCollection("Array_demo");
+
+
+BlrBatch1> db.Array_demo.find().pretty()
+[
+  {
+    _id: ObjectId("64ce192e552a059031759f1d"),
+    Name: 'Days',
+    Days: [ 'Sun', 'Mon' ]
+  }
+]
+
+
+
+push
+-----
+BlrBatch1> db.Array_demo.updateOne({Name:"Days"},{$push:{Days:"Tues"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+BlrBatch1> db.Array_demo.find().pretty()
+[
+  {
+    _id: ObjectId("64ce192e552a059031759f1d"),
+    Name: 'Days',
+    Days: [ 'Sun', 'Mon', 'Tues' ]
+  }
+]
+
+pop
+----
+BlrBatch1> db.Array_demo.updateOne({Name:"Days"},{$pop:{Days:1}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+BlrBatch1> db.Array_demo.find().pretty()
+[
+  {
+    _id: ObjectId("64ce192e552a059031759f1d"),
+    Name: 'Days',
+    Days: [ 'Sun', 'Mon' ]
+  }
+]
+BlrBatch1> db.Array_demo.updateOne({Name:"Days"},{$pop:{Days:-1}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+BlrBatch1> db.Array_demo.find().pretty()
+[
+  {
+    _id: ObjectId("64ce192e552a059031759f1d"),
+    Name: 'Days',
+    Days: [ 'Mon' ]
+  }
+]
+
+each
+-----
+BlrBatch1> db.Array_demo.updateOne({Name:"Days"},
+{$push:{Days:{$each:["Tues","Wed","Thurs","Fri"]}}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+BlrBatch1> db.Array_demo.find().pretty()
+[
+  {
+    _id: ObjectId("64ce192e552a059031759f1d"),
+    Name: 'Days',
+    Days: [ 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri' ]
+  }
+]
+
+Pull to remove data anywhere in the array
+-----------------------------------------------------
+BlrBatch1> db.Array_demo.updateOne({Name:"Days"},{$pull:{Days:"Thurs"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+BlrBatch1> db.Array_demo.find().pretty()
+[
+  {
+    _id: ObjectId("64ce192e552a059031759f1d"),
+    Name: 'Days',
+    Days: [ 'Mon', 'Tues', 'Wed', 'Fri' ]
+  }
+]
+
+BlrBatch1> db.Array_demo.updateOne({Name:"Days"},{$pull:{Days:{$in:["Mon","Wed"]}}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+BlrBatch1> db.Array_demo.find().pretty()
+[
+  {
+    _id: ObjectId("64ce192e552a059031759f1d"),
+    Name: 'Days',
+    Days: [ 'Tues', 'Fri' ]
+  }
+]
+
+unset
+-----
+BlrBatch1> db.Emp_details.updateOne({Name:"Pradeep"},{$unset:{"Salary":28000}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+BlrBatch1> db.Emp_details.find({Name:"Pradeep"}).pretty()
+[
+  {
+    _id: ObjectId("64ce16880cdec061feae8f27"),
+    Name: 'Pradeep',
+    Company_Name: 'KGiSL',
+    Department: 'Sales',
+    Gender: 'Male'
+  }
+
+
+To remove single document from the collection based on specified query
+---------------------------------------------------------------------
+
+BlrBatch1> db.Emp_details.remove({Name:"Pradeep"})
+
+DeprecationWarning: Collection.remove() is deprecated. Use deleteOne, deleteMany, findOneAndDelete, or bulkWrite.
+{ acknowledged: true, deletedCount: 1 }
+
+
+BlrBatch1> db.Emp_details.find({Name:"Pradeep"}).pretty()
+
+BlrBatch1> db.Emp_details.find().pretty()
+[
+  {
+    _id: ObjectId("64cdc910552a059031759f10"),
+    Name: 'Sivaraman',
+    Gender: 'Male',
+    Department: 'HR',
+    Salary: 49500,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc910552a059031759f11"),
+    Name: 'Suresh',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 60000,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc910552a059031759f12"),
+    Name: 'Samuel',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 44600,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc910552a059031759f13"),
+    Name: 'Priya',
+    Gender: 'Female',
+    Department: 'Admin',
+    Salary: 19500,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9b2552a059031759f14"),
+    Name: 'Radhika',
+    Gender: 'Female',
+    Department: 'HR',
+    Salary: 48899.9,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9b2552a059031759f15"),
+    Name: 'Kavin',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 64000,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9b2552a059031759f16"),
+    Name: 'Lal',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 29000,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9b2552a059031759f17"),
+    Name: 'Ramya',
+    Gender: 'Female',
+    Department: 'Admin',
+    Salary: 18500,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9f3552a059031759f18"),
+    Name: 'Sailaja',
+    Gender: 'Female',
+    Department: 'HR',
+    Salary: 42899.8,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9f3552a059031759f19"),
+    Name: 'Kumar',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 44000,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9f3552a059031759f1a"),
+    Name: 'Hari',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 43200,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9f3552a059031759f1b"),
+    Name: 'Kavya',
+    Gender: 'Female',
+    Department: 'Admin',
+    Salary: 15500,
+    DOJ: ISODate("2023-08-05T04:43:34.528Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdd95a0cdec061feae88a6"),
+    Name: 'Ramsaran',
+    Company_Name: 'KGiSL',
+    Department: 'Sales',
+    Gender: 'Male',
+    Salary: 26500
+  },
+  {
+    _id: ObjectId("64cdd98d0cdec061feae88b3"),
+    Name: 'Kiruba',
+    Company_Name: 'KGiSL',
+    Department: 'Sales',
+    Salary: 26500,
+    Gender: 'Male'
+  }
+]
+BlrBatch1>
+
+]
+
+Delete
+---------
+
+BlrBatch1> db.Emp_details.deleteOne({Name:"Kiruba"})
+{ acknowledged: true, deletedCount: 1 }
+
+
+BlrBatch1> db.Emp_details.find().pretty()
+[
+  {
+    _id: ObjectId("64cdc910552a059031759f10"),
+    Name: 'Sivaraman',
+    Gender: 'Male',
+    Department: 'HR',
+    Salary: 49500,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc910552a059031759f11"),
+    Name: 'Suresh',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 60000,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc910552a059031759f12"),
+    Name: 'Samuel',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 44600,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc910552a059031759f13"),
+    Name: 'Priya',
+    Gender: 'Female',
+    Department: 'Admin',
+    Salary: 19500,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9b2552a059031759f14"),
+    Name: 'Radhika',
+    Gender: 'Female',
+    Department: 'HR',
+    Salary: 48899.9,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9b2552a059031759f15"),
+    Name: 'Kavin',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 64000,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9b2552a059031759f16"),
+    Name: 'Lal',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 29000,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9b2552a059031759f17"),
+    Name: 'Ramya',
+    Gender: 'Female',
+    Department: 'Admin',
+    Salary: 18500,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9f3552a059031759f18"),
+    Name: 'Sailaja',
+    Gender: 'Female',
+    Department: 'HR',
+    Salary: 42899.8,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9f3552a059031759f19"),
+    Name: 'Kumar',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 44000,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9f3552a059031759f1a"),
+    Name: 'Hari',
+    Gender: 'Male',
+    Department: 'Sales',
+    Salary: 43200,
+    DOJ: ISODate("2023-08-05T10:09:45.000Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdc9f3552a059031759f1b"),
+    Name: 'Kavya',
+    Gender: 'Female',
+    Department: 'Admin',
+    Salary: 15500,
+    DOJ: ISODate("2023-08-05T04:43:34.528Z"),
+    Company_Name: 'KGISL'
+  },
+  {
+    _id: ObjectId("64cdd95a0cdec061feae88a6"),
+    Name: 'Ramsaran',
+    Company_Name: 'KGiSL',
+    Department: 'Sales',
+    Gender: 'Male',
+    Salary: 26500
+  }
+]
+
+BlrBatch1> db.Emp_details.deleteMany({})
+{ acknowledged: true, deletedCount: 13 }
+
+BlrBatch1> db.Emp_details.find().pretty()

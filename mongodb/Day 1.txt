@@ -1,0 +1,962 @@
+Day 1
+---------------
+
+test> show dbs
+BB             40.00 KiB
+ChennaiB2      72.00 KiB
+EComm         144.00 KiB
+Employee       72.00 KiB
+Kgm_B15        72.00 KiB
+MCAIIM         72.00 KiB
+PVT_Employee  128.00 KiB
+Showroom       72.00 KiB
+Student        72.00 KiB
+admin          40.00 KiB
+batch17       200.00 KiB
+config         84.00 KiB
+kgm           144.00 KiB
+kgmchnb2      224.00 KiB
+local          80.00 KiB
+
+// Creating a Database
+test> use BlrBatch1
+
+// Create a Collection
+BlrBatch1> db.createCollection("Student_det");
+{ ok: 1 }
+BlrBatch1> db.createCollection("Department");
+{ ok: 1 }
+
+BlrBatch1> show dbs
+BB             40.00 KiB
+BlrBatch1      16.00 KiB
+ChennaiB2      72.00 KiB
+EComm         144.00 KiB
+Employee       72.00 KiB
+Kgm_B15        72.00 KiB
+MCAIIM         72.00 KiB
+PVT_Employee  128.00 KiB
+Showroom       72.00 KiB
+Student        72.00 KiB
+admin          40.00 KiB
+batch17       200.00 KiB
+config         72.00 KiB
+kgm           144.00 KiB
+kgmchnb2      224.00 KiB
+local          80.00 KiB
+
+// Listing all the collections
+BlrBatch1> show collections
+Department
+Student_det
+
+// Droping the collection
+BlrBatch1> db.Department.drop()
+
+BlrBatch1> show collections
+Student_det
+
+// Drop a Database
+
+BlrBatch2> db.dropDatabase()
+{ ok: 1, dropped: 'BlrBatch2' }
+
+//
+BlrBatch2> show dbs
+
+BB             40.00 KiB
+BlrBatch1       8.00 KiB
+ChennaiB2      72.00 KiB
+EComm         144.00 KiB
+Employee       72.00 KiB
+Kgm_B15        72.00 KiB
+MCAIIM         72.00 KiB
+PVT_Employee  128.00 KiB
+Showroom       72.00 KiB
+Student        72.00 KiB
+admin          40.00 KiB
+batch17       200.00 KiB
+config        108.00 KiB
+kgm           144.00 KiB
+kgmchnb2      224.00 KiB
+local          80.00 KiB
+
+db.Student_det.insertOne(
+{ 
+"Rollno":1001,
+"Name":"Kirubagaran",
+"m1":87,
+"m2":84,
+"m3":88,
+"DOJ":new Date("2023-05-15"),
+"Subject":["HTML5","CSS","JavaScript","ReactJS","MongoDB"], 
+"Personal":{"Age":21,"emailid":"kiruba123@gmail.com"}
+})
+
+Data Insertion
+-----------------------------
+ db.Student_det.insertMany(
+[
+	{ 
+		"Rollno":1002,
+		"Name":"Arun",
+		"m1":17,
+		"m2":14,
+		"m3":18,
+		"DOJ":new Date("2023-05-14"),
+		"Subject":["HTML5","CSS","JavaScript","ReactJS","MongoDB"], 
+		"Personal":{"Age":22,"emailid":"arunmass@gmail.com"}
+	},
+	{
+		"Rollno":1003,
+		"Name":"Ramesh",
+		"m1":50,
+		"m2":55,
+		"m3":57,
+		"DOJ":new Date("2023-05-15"),
+		"Subject":["HTML5","CSS","JavaScript","ReactJS","MongoDB"],
+		"Personal":{"Age":21,"emailid":"ramesh456@gmail.com"}
+	},
+	{
+		"Rollno":1004,
+		"Name":"Janani",
+		"m1":72,
+		"m2":75,
+		"m3":85,
+		"DOJ":new Date("2023-05-20"),
+		"Subject":["HTML5","CSS","JavaScript","ReactJS","MongoDB"],
+		"Personal":{"Age":20,"emailid":"janani88@gmail.com"}
+	}
+])
+
+
+BlrBatch2> db.Student_det.insert([{ "Rollno":1005,"Name":"Prasath","m1":27,"m2":24,"m3":38,"DOJ":new Date("2023-05-13"),"Subject":["HTML5","CSS","JavaScript","ReactJS","MongoDB"], "Personal":{"Age":22,"emailid":"prasathrio@gmail.com"}},{"Rollno":1006,"Name":"Negha","m1":52,"m2":56,"m3":67,"DOJ":new Date("2023-05-15"),"Subject":["HTML5","CSS","JavaScript","ReactJS","MongoDB"],"Personal":{"Age":21,"emailid":"neha6@gmail.com"}},{"Rollno":1007,"Name":"Jansi","m1":12,"m2":15,"m3":25,"DOJ":new Date("2023-05-16"),"Subject":["HTML5","CSS","JavaScript","ReactJS","MongoDB"],"Personal":{"Age":20,"emailid":"jansiii@gmail.com"}}])
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("64cca1fd5feb0539bec60300"),
+    '1': ObjectId("64cca1fd5feb0539bec60301"),
+    '2': ObjectId("64cca1fd5feb0539bec60302")
+  }
+}
+BlrBatch2> db.Student_det.insert({ "Rollno":1010,"Name":"Ranjith","m1":67,"m2":64,"m3":68,"DOJ":new Date("2023-05-15"),"Subject":["HTML5","CSS","JavaScript","ReactJS","MongoDB"], "Personal":{"Age":21,"emailid":"rranjith@gmail.com"}})
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("64cca2325feb0539bec60303") }
+}
+
+Data Retrieval
+-----------------------------
+BlrBatch2> db.Student_det.find()
+[
+  {
+    _id: ObjectId("64cc9bac5feb0539bec602fc"),
+    Rollno: 1001,
+    Name: 'Kirubagaran',
+    m1: 87,
+    m2: 84,
+    m3: 88,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 21, emailid: 'kiruba123@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca1125feb0539bec602fd"),
+    Rollno: 1002,
+    Name: 'Arun',
+    m1: 17,
+    m2: 14,
+    m3: 18,
+    DOJ: ISODate("2023-05-14T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 22, emailid: 'arunmass@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca1125feb0539bec602fe"),
+    Rollno: 1003,
+    Name: 'Ramesh',
+    m1: 50,
+    m2: 55,
+    m3: 57,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 21, emailid: 'ramesh456@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca1125feb0539bec602ff"),
+    Rollno: 1004,
+    Name: 'Janani',
+    m1: 72,
+    m2: 75,
+    m3: 85,
+    DOJ: ISODate("2023-05-20T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 20, emailid: 'janani88@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca1fd5feb0539bec60300"),
+    Rollno: 1005,
+    Name: 'Prasath',
+    m1: 27,
+    m2: 24,
+    m3: 38,
+    DOJ: ISODate("2023-05-13T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 22, emailid: 'prasathrio@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca1fd5feb0539bec60301"),
+    Rollno: 1006,
+    Name: 'Negha',
+    m1: 52,
+    m2: 56,
+    m3: 67,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 21, emailid: 'neha6@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca1fd5feb0539bec60302"),
+    Rollno: 1007,
+    Name: 'Jansi',
+    m1: 12,
+    m2: 15,
+    m3: 25,
+    DOJ: ISODate("2023-05-16T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 20, emailid: 'jansiii@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca2325feb0539bec60303"),
+    Rollno: 1010,
+    Name: 'Ranjith',
+    m1: 67,
+    m2: 64,
+    m3: 68,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 21, emailid: 'rranjith@gmail.com' }
+  }
+]
+
+BlrBatch2> db.Student_det.find().pretty()
+[
+  {
+    _id: ObjectId("64cc9bac5feb0539bec602fc"),
+    Rollno: 1001,
+    Name: 'Kirubagaran',
+    m1: 87,
+    m2: 84,
+    m3: 88,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 21, emailid: 'kiruba123@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca1125feb0539bec602fd"),
+    Rollno: 1002,
+    Name: 'Arun',
+    m1: 17,
+    m2: 14,
+    m3: 18,
+    DOJ: ISODate("2023-05-14T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 22, emailid: 'arunmass@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca1125feb0539bec602fe"),
+    Rollno: 1003,
+    Name: 'Ramesh',
+    m1: 50,
+    m2: 55,
+    m3: 57,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 21, emailid: 'ramesh456@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca1125feb0539bec602ff"),
+    Rollno: 1004,
+    Name: 'Janani',
+    m1: 72,
+    m2: 75,
+    m3: 85,
+    DOJ: ISODate("2023-05-20T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 20, emailid: 'janani88@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca1fd5feb0539bec60300"),
+    Rollno: 1005,
+    Name: 'Prasath',
+    m1: 27,
+    m2: 24,
+    m3: 38,
+    DOJ: ISODate("2023-05-13T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 22, emailid: 'prasathrio@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca1fd5feb0539bec60301"),
+    Rollno: 1006,
+    Name: 'Negha',
+    m1: 52,
+    m2: 56,
+    m3: 67,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 21, emailid: 'neha6@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca1fd5feb0539bec60302"),
+    Rollno: 1007,
+    Name: 'Jansi',
+    m1: 12,
+    m2: 15,
+    m3: 25,
+    DOJ: ISODate("2023-05-16T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 20, emailid: 'jansiii@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca2325feb0539bec60303"),
+    Rollno: 1010,
+    Name: 'Ranjith',
+    m1: 67,
+    m2: 64,
+    m3: 68,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 21, emailid: 'rranjith@gmail.com' }
+  }
+]
+
+BlrBatch2> db.Student_det.find({Name:"Arun"})
+[
+  {
+    _id: ObjectId("64cca1125feb0539bec602fd"),
+    Rollno: 1002,
+    Name: 'Arun',
+    m1: 17,
+    m2: 14,
+    m3: 18,
+    DOJ: ISODate("2023-05-14T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 22, emailid: 'arunmass@gmail.com' }
+  }
+]
+
+BlrBatch2> db.Student_det.find({DOJ:new Date("2023-05-15")})
+[
+  {
+    _id: ObjectId("64cc9bac5feb0539bec602fc"),
+    Rollno: 1001,
+    Name: 'Kirubagaran',
+    m1: 87,
+    m2: 84,
+    m3: 88,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 21, emailid: 'kiruba123@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca1125feb0539bec602fe"),
+    Rollno: 1003,
+    Name: 'Ramesh',
+    m1: 50,
+    m2: 55,
+    m3: 57,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 21, emailid: 'ramesh456@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca1fd5feb0539bec60301"),
+    Rollno: 1006,
+    Name: 'Negha',
+    m1: 52,
+    m2: 56,
+    m3: 67,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 21, emailid: 'neha6@gmail.com' }
+  },
+  {
+    _id: ObjectId("64cca2325feb0539bec60303"),
+    Rollno: 1010,
+    Name: 'Ranjith',
+    m1: 67,
+    m2: 64,
+    m3: 68,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Subject: [ 'HTML5', 'CSS', 'JavaScript', 'ReactJS', 'MongoDB' ],
+    Personal: { Age: 21, emailid: 'rranjith@gmail.com' }
+  }
+]
+
+// Projection
+BlrBatch2> db.Student_det.find({DOJ:new Date("2023-05-15")},{Name:1,DOJ:1,_id:0})
+[
+  { Name: 'Kirubagaran', DOJ: ISODate("2023-05-15T00:00:00.000Z") },
+  { Name: 'Ramesh', DOJ: ISODate("2023-05-15T00:00:00.000Z") },
+  { Name: 'Negha', DOJ: ISODate("2023-05-15T00:00:00.000Z") },
+  { Name: 'Ranjith', DOJ: ISODate("2023-05-15T00:00:00.000Z") }
+]
+
+
+BlrBatch2> db.Student_det.find({},{Name:1,m1:1,m2:1,m3:1,DOJ:1,Personal:1,_id:0})
+[
+  {
+    Name: 'Kirubagaran',
+    m1: 87,
+    m2: 84,
+    m3: 88,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Personal: { Age: 21, emailid: 'kiruba123@gmail.com' }
+  },
+  {
+    Name: 'Arun',
+    m1: 17,
+    m2: 14,
+    m3: 18,
+    DOJ: ISODate("2023-05-14T00:00:00.000Z"),
+    Personal: { Age: 22, emailid: 'arunmass@gmail.com' }
+  },
+  {
+    Name: 'Ramesh',
+    m1: 50,
+    m2: 55,
+    m3: 57,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Personal: { Age: 21, emailid: 'ramesh456@gmail.com' }
+  },
+  {
+    Name: 'Janani',
+    m1: 72,
+    m2: 75,
+    m3: 85,
+    DOJ: ISODate("2023-05-20T00:00:00.000Z"),
+    Personal: { Age: 20, emailid: 'janani88@gmail.com' }
+  },
+  {
+    Name: 'Prasath',
+    m1: 27,
+    m2: 24,
+    m3: 38,
+    DOJ: ISODate("2023-05-13T00:00:00.000Z"),
+    Personal: { Age: 22, emailid: 'prasathrio@gmail.com' }
+  },
+  {
+    Name: 'Negha',
+    m1: 52,
+    m2: 56,
+    m3: 67,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Personal: { Age: 21, emailid: 'neha6@gmail.com' }
+  },
+  {
+    Name: 'Jansi',
+    m1: 12,
+    m2: 15,
+    m3: 25,
+    DOJ: ISODate("2023-05-16T00:00:00.000Z"),
+    Personal: { Age: 20, emailid: 'jansiii@gmail.com' }
+  },
+  {
+    Name: 'Ranjith',
+    m1: 67,
+    m2: 64,
+    m3: 68,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Personal: { Age: 21, emailid: 'rranjith@gmail.com' }
+  }
+]
+BlrBatch2> db.Student_det.find({},{Name:1,m1:1,m2:1,m3:1,_id:0})
+[
+  { Name: 'Kirubagaran', m1: 87, m2: 84, m3: 88 },
+  { Name: 'Arun', m1: 17, m2: 14, m3: 18 },
+  { Name: 'Ramesh', m1: 50, m2: 55, m3: 57 },
+  { Name: 'Janani', m1: 72, m2: 75, m3: 85 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 },
+  { Name: 'Jansi', m1: 12, m2: 15, m3: 25 },
+  { Name: 'Ranjith', m1: 67, m2: 64, m3: 68 }
+]
+
+BlrBatch2> db.Student_det.find({Name:'Prasath',DOJ:new Date("2023-05-13")},{Name:1,m1:1,m2:1,m3:1,_id:0})
+[
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 }
+]
+
+BlrBatch2> db.Student_det.find({Name:'Prasath',DOJ:new Date("2023-05-15")},{Name:1,m1:1,m2:1,m3:1,_id:0})
+
+BlrBatch2> db.Student_det.find({},{Name:1,"Personal.emailid":1,_id:0});
+[
+  { Name: 'Kirubagaran', Personal: { emailid: 'kiruba123@gmail.com' } },
+  { Name: 'Arun', Personal: { emailid: 'arunmass@gmail.com' } },
+  { Name: 'Ramesh', Personal: { emailid: 'ramesh456@gmail.com' } },
+  { Name: 'Janani', Personal: { emailid: 'janani88@gmail.com' } },
+  { Name: 'Prasath', Personal: { emailid: 'prasathrio@gmail.com' } },
+  { Name: 'Negha', Personal: { emailid: 'neha6@gmail.com' } },
+  { Name: 'Jansi', Personal: { emailid: 'jansiii@gmail.com' } },
+  { Name: 'Ranjith', Personal: { emailid: 'rranjith@gmail.com' } },
+  { Name: 'Prasath', Personal: { emailid: 'prasathio@gmail.com' } },
+  { Name: 'Negha', Personal: { emailid: 'nehar6@gmail.com' } },
+  { Name: 'Jansi', Personal: { emailid: 'jansee@gmail.com' } }
+]
+
+
+BlrBatch2> db.Student_det.find({"Subject":"JavaScript"},
+{Name:1,"Subject.$":1,"Personal.emailid":1,_id:0});
+
+[
+  {
+    Name: 'Kirubagaran',
+    Subject: [ 'JavaScript' ],
+    Personal: { emailid: 'kiruba123@gmail.com' }
+  },
+  {
+    Name: 'Arun',
+    Subject: [ 'JavaScript' ],
+    Personal: { emailid: 'arunmass@gmail.com' }
+  },
+  {
+    Name: 'Ramesh',
+    Subject: [ 'JavaScript' ],
+    Personal: { emailid: 'ramesh456@gmail.com' }
+  },
+  {
+    Name: 'Janani',
+    Subject: [ 'JavaScript' ],
+    Personal: { emailid: 'janani88@gmail.com' }
+  },
+  {
+    Name: 'Prasath',
+    Subject: [ 'JavaScript' ],
+    Personal: { emailid: 'prasathrio@gmail.com' }
+  },
+  {
+    Name: 'Negha',
+    Subject: [ 'JavaScript' ],
+    Personal: { emailid: 'neha6@gmail.com' }
+  },
+  {
+    Name: 'Jansi',
+    Subject: [ 'JavaScript' ],
+    Personal: { emailid: 'jansiii@gmail.com' }
+  },
+  {
+    Name: 'Ranjith',
+    Subject: [ 'JavaScript' ],
+    Personal: { emailid: 'rranjith@gmail.com' }
+  },
+  {
+    Name: 'Prasath',
+    Subject: [ 'JavaScript' ],
+    Personal: { emailid: 'prasathio@gmail.com' }
+  },
+  {
+    Name: 'Negha',
+    Subject: [ 'JavaScript' ],
+    Personal: { emailid: 'nehar6@gmail.com' }
+  },
+  {
+    Name: 'Jansi',
+    Subject: [ 'JavaScript' ],
+    Personal: { emailid: 'jansee@gmail.com' }
+  }
+]
+
+// count
+BlrBatch2> db.Student_det.find().count()
+11
+
+//sort
+BlrBatch2> db.Student_det.find({},{Name:1,m1:1,m2:1,m3:1,_id:0}).sort({Name:1})
+[
+  { Name: 'Arun', m1: 17, m2: 14, m3: 18 },
+  { Name: 'Janani', m1: 72, m2: 75, m3: 85 },
+  { Name: 'Jansi', m1: 12, m2: 15, m3: 25 },
+  { Name: 'Jansi', m1: 12, m2: 15, m3: 25 },
+  { Name: 'Kirubagaran', m1: 87, m2: 84, m3: 88 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 },
+  { Name: 'Ramesh', m1: 50, m2: 55, m3: 57 },
+  { Name: 'Ranjith', m1: 67, m2: 64, m3: 68 }
+]
+
+BlrBatch2> db.Student_det.find({},{Name:1,m1:1,m2:1,m3:1,_id:0}).sort({Name:-1})
+[
+  { Name: 'Ranjith', m1: 67, m2: 64, m3: 68 },
+  { Name: 'Ramesh', m1: 50, m2: 55, m3: 57 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 },
+  { Name: 'Kirubagaran', m1: 87, m2: 84, m3: 88 },
+  { Name: 'Jansi', m1: 12, m2: 15, m3: 25 },
+  { Name: 'Jansi', m1: 12, m2: 15, m3: 25 },
+  { Name: 'Janani', m1: 72, m2: 75, m3: 85 },
+  { Name: 'Arun', m1: 17, m2: 14, m3: 18 }
+]
+BlrBatch2> db.Student_det.find({},{Name:1,m1:1,m2:1,m3:1,DOJ:1,_id:0}).sort({DOJ:1})
+[
+  {
+    Name: 'Prasath',
+    m1: 27,
+    m2: 24,
+    m3: 38,
+    DOJ: ISODate("2023-05-13T00:00:00.000Z")
+  },
+  {
+    Name: 'Prasath',
+    m1: 27,
+    m2: 24,
+    m3: 38,
+    DOJ: ISODate("2023-05-13T00:00:00.000Z")
+  },
+  {
+    Name: 'Arun',
+    m1: 17,
+    m2: 14,
+    m3: 18,
+    DOJ: ISODate("2023-05-14T00:00:00.000Z")
+  },
+  {
+    Name: 'Kirubagaran',
+    m1: 87,
+    m2: 84,
+    m3: 88,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z")
+  },
+  {
+    Name: 'Ramesh',
+    m1: 50,
+    m2: 55,
+    m3: 57,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z")
+  },
+  {
+    Name: 'Negha',
+    m1: 52,
+    m2: 56,
+    m3: 67,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z")
+  },
+  {
+    Name: 'Ranjith',
+    m1: 67,
+    m2: 64,
+    m3: 68,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z")
+  },
+  {
+    Name: 'Negha',
+    m1: 52,
+    m2: 56,
+    m3: 67,
+    DOJ: ISODate("2023-05-15T00:00:00.000Z")
+  },
+  {
+    Name: 'Jansi',
+    m1: 12,
+    m2: 15,
+    m3: 25,
+    DOJ: ISODate("2023-05-16T00:00:00.000Z")
+  },
+  {
+    Name: 'Jansi',
+    m1: 12,
+    m2: 15,
+    m3: 25,
+    DOJ: ISODate("2023-05-16T00:00:00.000Z")
+  },
+  {
+    Name: 'Janani',
+    m1: 72,
+    m2: 75,
+    m3: 85,
+    DOJ: ISODate("2023-05-20T00:00:00.000Z")
+  }
+]
+
+// Limit()
+
+BlrBatch2> db.Student_det.find({},{Name:1,m1:1,m2:1,m3:1,_id:0}).limit(4)
+[
+  { Name: 'Kirubagaran', m1: 87, m2: 84, m3: 88 },
+  { Name: 'Arun', m1: 17, m2: 14, m3: 18 },
+  { Name: 'Ramesh', m1: 50, m2: 55, m3: 57 },
+  { Name: 'Janani', m1: 72, m2: 75, m3: 85 }
+]
+BlrBatch2> db.Student_det.find({},{Name:1,m1:1,m2:1,m3:1,_id:0}).limit(6)
+[
+  { Name: 'Kirubagaran', m1: 87, m2: 84, m3: 88 },
+  { Name: 'Arun', m1: 17, m2: 14, m3: 18 },
+  { Name: 'Ramesh', m1: 50, m2: 55, m3: 57 },
+  { Name: 'Janani', m1: 72, m2: 75, m3: 85 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 }
+]
+
+BlrBatch2> db.Student_det.find({},{Name:1,m1:1,m2:1,m3:1,_id:0}).sort({Name:1}).limit(3)
+[
+  { Name: 'Arun', m1: 17, m2: 14, m3: 18 },
+  { Name: 'Janani', m1: 72, m2: 75, m3: 85 },
+  { Name: 'Jansi', m1: 12, m2: 15, m3: 25 }
+]
+
+
+// limit and skip
+BlrBatch2> db.Student_det.find({},{Name:1,m1:1,m2:1,m3:1,_id:0}).sort({Name:1})
+[
+  { Name: 'Arun', m1: 17, m2: 14, m3: 18 },
+  { Name: 'Janani', m1: 72, m2: 75, m3: 85 },
+  { Name: 'Jansi', m1: 12, m2: 15, m3: 25 },
+  { Name: 'Jansi', m1: 12, m2: 15, m3: 25 },
+  { Name: 'Kirubagaran', m1: 87, m2: 84, m3: 88 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 },
+  { Name: 'Ramesh', m1: 50, m2: 55, m3: 57 },
+  { Name: 'Ranjith', m1: 67, m2: 64, m3: 68 }
+]
+BlrBatch2> db.Student_det.find({},{Name:1,m1:1,m2:1,m3:1,_id:0}).sort({Name:1})
+.limit(3).skip(4)
+[
+  { Name: 'Kirubagaran', m1: 87, m2: 84, m3: 88 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 }
+]
+BlrBatch2> db.Student_det.find({},{Name:1,m1:1,m2:1,m3:1,_id:0})
+.sort({Name:1}).limit(6).skip(3)
+
+[
+  { Name: 'Jansi', m1: 12, m2: 15, m3: 25 },
+  { Name: 'Kirubagaran', m1: 87, m2: 84, m3: 88 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 }
+
+
+Comparision Operator:
+---------------------------
+BlrBatch2> db.Student_det.find({m2:{$gt:60}},{Name:1,m2:1,_id:0}).sort({Name:1})
+[
+  { Name: 'Janani', m2: 75 },
+  { Name: 'Kirubagaran', m2: 84 },
+  { Name: 'Ranjith', m2: 64 }
+]
+
+BlrBatch2> db.Student_det.find({m2:{$lt:60}},{Name:1,m2:1,_id:0}).sort({Name:1})
+[
+  { Name: 'Arun', m2: 14 },
+  { Name: 'Jansi', m2: 15 },
+  { Name: 'Jansi', m2: 15 },
+  { Name: 'Negha', m2: 56 },
+  { Name: 'Negha', m2: 56 },
+  { Name: 'Prasath', m2: 24 },
+  { Name: 'Prasath', m2: 24 },
+  { Name: 'Ramesh', m2: 55 }
+]
+
+BlrBatch2> db.Student_det.find({m2:{$lte:15}},{Name:1,m2:1,_id:0}).sort({Name:1})
+[
+  { Name: 'Arun', m2: 14 },
+  { Name: 'Jansi', m2: 15 },
+  { Name: 'Jansi', m2: 15 }
+]
+BlrBatch2> db.Student_det.find({m2:{$gte:15}},{Name:1,m2:1,_id:0}).sort({Name:1})
+[
+  { Name: 'Janani', m2: 75 },
+  { Name: 'Jansi', m2: 15 },
+  { Name: 'Jansi', m2: 15 },
+  { Name: 'Kirubagaran', m2: 84 },
+  { Name: 'Negha', m2: 56 },
+  { Name: 'Negha', m2: 56 },
+  { Name: 'Prasath', m2: 24 },
+  { Name: 'Prasath', m2: 24 },
+  { Name: 'Ramesh', m2: 55 },
+  { Name: 'Ranjith', m2: 64 }
+]
+
+BlrBatch2> db.Student_det.find({m2:{$eq:15}},{Name:1,m2:1,_id:0}).sort({Name:1})
+[ { Name: 'Jansi', m2: 15 }, { Name: 'Jansi', m2: 15 } ]
+
+BlrBatch2> db.Student_det.find({m2:{$ne:15}},{Name:1,m2:1,_id:0}).sort({Name:1})
+[
+  { Name: 'Arun', m2: 14 },
+  { Name: 'Janani', m2: 75 },
+  { Name: 'Kirubagaran', m2: 84 },
+  { Name: 'Negha', m2: 56 },
+  { Name: 'Negha', m2: 56 },
+  { Name: 'Prasath', m2: 24 },
+  { Name: 'Prasath', m2: 24 },
+  { Name: 'Ramesh', m2: 55 },
+  { Name: 'Ranjith', m2: 64 }
+]
+
+BlrBatch2> db.Student_det.find({DOJ:{$gt:new Date("2023-05-15")}},
+{Name:1,DOJ:1,"Personal.emailid":1,_id:0}).sort({Name:1})
+
+[
+  {
+    Name: 'Janani',
+    DOJ: ISODate("2023-05-20T00:00:00.000Z"),
+    Personal: { emailid: 'janani88@gmail.com' }
+  },
+  {
+    Name: 'Jansi',
+    DOJ: ISODate("2023-05-16T00:00:00.000Z"),
+    Personal: { emailid: 'jansiii@gmail.com' }
+  },
+  {
+    Name: 'Jansi',
+    DOJ: ISODate("2023-05-16T00:00:00.000Z"),
+    Personal: { emailid: 'jansee@gmail.com' }
+  }
+]
+BlrBatch2> db.Student_det.find({DOJ:{$gte:new Date("2023-05-15")}},{Name:1,DOJ:1,"Personal.emailid":1,_id:0}).sort({Name:1})
+[
+  {
+    Name: 'Janani',
+    DOJ: ISODate("2023-05-20T00:00:00.000Z"),
+    Personal: { emailid: 'janani88@gmail.com' }
+  },
+  {
+    Name: 'Jansi',
+    DOJ: ISODate("2023-05-16T00:00:00.000Z"),
+    Personal: { emailid: 'jansiii@gmail.com' }
+  },
+  {
+    Name: 'Jansi',
+    DOJ: ISODate("2023-05-16T00:00:00.000Z"),
+    Personal: { emailid: 'jansee@gmail.com' }
+  },
+  {
+    Name: 'Kirubagaran',
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Personal: { emailid: 'kiruba123@gmail.com' }
+  },
+  {
+    Name: 'Negha',
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Personal: { emailid: 'neha6@gmail.com' }
+  },
+  {
+    Name: 'Negha',
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Personal: { emailid: 'nehar6@gmail.com' }
+  },
+  {
+    Name: 'Ramesh',
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Personal: { emailid: 'ramesh456@gmail.com' }
+  },
+  {
+    Name: 'Ranjith',
+    DOJ: ISODate("2023-05-15T00:00:00.000Z"),
+    Personal: { emailid: 'rranjith@gmail.com' }
+  }
+]
+
+
+BlrBatch2> db.Student_det.find({Name:{$in:["Janani","Arun","Ram","Kiruba","Naveen",
+"Ranjith","Nanda"]}},{Name:1,"Personal.emailid":1,_id:0}).sort({Name:1})
+[
+  { Name: 'Arun', Personal: { emailid: 'arunmass@gmail.com' } },
+  { Name: 'Janani', Personal: { emailid: 'janani88@gmail.com' } },
+  { Name: 'Ranjith', Personal: { emailid: 'rranjith@gmail.com' } }
+]
+BlrBatch2> db.Student_det.find({Name:{$in:["Janani","Negha","Arun",
+"Ram","Kiruba","Naveen","Ranjith","Nanda"]}},{Name:1,"Personal.emailid":1,_id:0})
+.sort({Name:1})
+
+[
+  { Name: 'Arun', Personal: { emailid: 'arunmass@gmail.com' } },
+  { Name: 'Janani', Personal: { emailid: 'janani88@gmail.com' } },
+  { Name: 'Negha', Personal: { emailid: 'neha6@gmail.com' } },
+  { Name: 'Negha', Personal: { emailid: 'nehar6@gmail.com' } },
+  { Name: 'Ranjith', Personal: { emailid: 'rranjith@gmail.com' } }
+]
+BlrBatch2> db.Student_det.find({Name:{$in:["Ram","Kiruba","Naveen","Nanda"]}},
+{Name:1,"Personal.emailid":1,_id:0}).sort({Name:1})
+
+BlrBatch2> db.Student_det.find({m3:{$in:[50,60,70,80,90,100]}},
+{Name:1,"Personal.emailid":1,_id:0}).sort({Name:1})
+
+BlrBatch2> db.Student_det.find({m3:{$in:[50,60,70,85,67,90,100]}},
+{Name:1,"Personal.emailid":1,_id:0}).sort({Name:1})
+[
+  { Name: 'Janani', Personal: { emailid: 'janani88@gmail.com' } },
+  { Name: 'Negha', Personal: { emailid: 'neha6@gmail.com' } },
+  { Name: 'Negha', Personal: { emailid: 'nehar6@gmail.com' } }
+]
+
+Logical Operators
+-------------------------------
+
+AND
+----
+BlrBatch2> db.Student_det.find({$and:[{m1:{$gte:40}},{m2:{$gte:40}},{m3:{$gte:40}}]},
+{Name:1,m1:1,m2:1,m3:1,_id:0}).sort({Name:1})
+
+[
+  { Name: 'Janani', m1: 72, m2: 75, m3: 85 },
+  { Name: 'Kirubagaran', m1: 87, m2: 84, m3: 88 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 },
+  { Name: 'Ramesh', m1: 50, m2: 55, m3: 57 },
+  { Name: 'Ranjith', m1: 67, m2: 64, m3: 68 }
+]
+
+OR
+---
+BlrBatch2> db.Student_det.find({$or:[{m1:{$lt:40}},{m2:{$lt:40}},{m3:{$lt:40}}]},
+{Name:1,m1:1,m2:1,m3:1,_id:0}).sort({Name:1})
+
+[
+  { Name: 'Arun', m1: 17, m2: 14, m3: 18 },
+  { Name: 'Jansi', m1: 12, m2: 15, m3: 25 },
+  { Name: 'Jansi', m1: 12, m2: 15, m3: 25 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 }
+]
+
+nor
+---
+BlrBatch2> db.Student_det.find({$nor:[{Name:"Arun"}]},{Name:1,m1:1,m2:1,m3:1,_id:0});
+[
+  { Name: 'Kirubagaran', m1: 87, m2: 84, m3: 88 },
+  { Name: 'Ramesh', m1: 50, m2: 55, m3: 57 },
+  { Name: 'Janani', m1: 72, m2: 75, m3: 85 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 },
+  { Name: 'Jansi', m1: 12, m2: 15, m3: 25 },
+  { Name: 'Ranjith', m1: 67, m2: 64, m3: 68 },
+  { Name: 'Prasath', m1: 27, m2: 24, m3: 38 },
+  { Name: 'Negha', m1: 52, m2: 56, m3: 67 },
+  { Name: 'Jansi', m1: 12, m2: 15, m3: 25 }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
